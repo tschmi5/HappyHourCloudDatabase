@@ -1,14 +1,14 @@
-export interface Task {
+export interface Item {
     description: string;
     dateCreated: string;
     isComplete: boolean;
     dateCompleted: string;
 }
-export function isValidTask(task: Task){
-    if(task.description === undefined){
+export function isValidItem(item: Item){
+    if(item.description === undefined){
         return false;
     }
-    if(task.description.length === 0){
+    if(item.description.length === 0){
         return false;
     }
     return true;    
