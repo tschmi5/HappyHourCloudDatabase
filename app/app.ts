@@ -3,7 +3,6 @@ import { ItemsData } from "./itemsdata";
 import * as express from 'express';
 import * as morgan from 'morgan';
 import { Request, Response } from 'express';
-import { invalidDescription, noSuchItem, noChange } from "./types/Error";
 
 
 const bodyParser = require('body-parser');
@@ -46,7 +45,7 @@ function startServer(itemsData: ItemsData) {
       response.sendStatus(404)
     }
     } catch (error) {
-      response.status(404).send(noSuchItem(id));
+      response.status(404).send(id);
     }
   });
   /**
@@ -63,7 +62,7 @@ function startServer(itemsData: ItemsData) {
       response.sendStatus(404)
     }
     } catch (error) {
-      response.status(404).send(noSuchItem(name));
+      response.status(404).send(name);
     }
   });
   app.get('/api/items/rating/:rating', async (request: Request, response: Response) => {
@@ -76,7 +75,7 @@ function startServer(itemsData: ItemsData) {
       response.sendStatus(404)
     }
     } catch (error) {
-      response.status(404).send(noSuchItem(type));
+      response.status(404).send(type);
     }
   });
 

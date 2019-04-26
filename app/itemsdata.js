@@ -39,11 +39,11 @@ var mongodb_1 = require("mongodb");
 var dotenv = require("dotenv");
 dotenv.config();
 var URL = process.env.MONGO_CONNECTION || '';
-var TasksData = /** @class */ (function () {
-    function TasksData(client) {
-        this.tasks = client.db().collection('tasks');
+var ItemsData = /** @class */ (function () {
+    function ItemsData(client) {
+        this.items = client.db().collection('items');
     }
-    TasksData.connect = function () {
+    ItemsData.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -61,33 +61,53 @@ var TasksData = /** @class */ (function () {
             });
         });
     };
-    TasksData.prototype.getAllTasks = function () {
+    ItemsData.prototype.getAllItems = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.tasks.find({}).toArray()];
+                    case 0: return [4 /*yield*/, this.items.find({}).toArray()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    TasksData.prototype.getOneTask = function (id) {
+    ItemsData.prototype.getOneItem = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.tasks.findOne({ _id: new mongodb_1.ObjectId(id) })];
+                    case 0: return [4 /*yield*/, this.items.findOne({ _id: new mongodb_1.ObjectId(id) })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    TasksData.prototype.createTask = function (task) {
+    ItemsData.prototype.getByName = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.items.findOne({ name: name })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    ItemsData.prototype.getByType = function (type) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.items.find({ type: type }).toArray()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    ItemsData.prototype.createItem = function (item) {
         return __awaiter(this, void 0, void 0, function () {
             var res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.tasks.insertOne({
-                            task: task
+                    case 0: return [4 /*yield*/, this.items.insertOne({
+                            item: item
                         })];
                     case 1:
                         res = _a.sent();
@@ -96,38 +116,6 @@ var TasksData = /** @class */ (function () {
             });
         });
     };
-    TasksData.prototype.deleteTask = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.tasks.deleteOne({ _id: new mongodb_1.ObjectId(id) })];
-                    case 1:
-                        res = _a.sent();
-                        return [2 /*return*/, res.deletedCount];
-                }
-            });
-        });
-    };
-    TasksData.prototype.updateTask = function (id, task) {
-        return __awaiter(this, void 0, void 0, function () {
-            var res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.tasks.updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: {
-                                "task": {
-                                    "description": task.description,
-                                    "isComplete": task.isComplete,
-                                    "dateCompleted": task.dateCompleted
-                                }
-                            } }, { upsert: false })];
-                    case 1:
-                        res = _a.sent();
-                        return [2 /*return*/, res];
-                }
-            });
-        });
-    };
-    return TasksData;
+    return ItemsData;
 }());
-exports.TasksData = TasksData;
+exports.ItemsData = ItemsData;

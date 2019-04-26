@@ -1,13 +1,13 @@
 "use strict";
 exports.__esModule = true;
-function invalidDescription(task) {
+function invalidDescription(item) {
     var err;
     err = {
         parameter: "Description",
-        parameterValue: task.description || "undefined",
+        parameterValue: item.description || "undefined",
         errorText: ""
     };
-    if (task.description === undefined) {
+    if (item.description === undefined) {
         err.errorText = "No Description Parameter Included";
     }
     else {
@@ -16,14 +16,14 @@ function invalidDescription(task) {
     return err;
 }
 exports.invalidDescription = invalidDescription;
-function noSuchTask(id) {
+function noSuchItem(id) {
     return {
         parameter: "Id",
         parameterValue: id || "",
-        errorText: "No Task exists with given Id"
+        errorText: "No Item exists with given Id"
     };
 }
-exports.noSuchTask = noSuchTask;
+exports.noSuchItem = noSuchItem;
 function noChange(id) {
     return {
         parameter: "Id",

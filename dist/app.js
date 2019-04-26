@@ -8,90 +8,93 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tasksdata_1 = require("./tasksdata");
+const itemsdata_1 = require("./itemsdata");
 const express = require("express");
 const morgan = require("morgan");
-const Task_1 = require("./types/Task");
-const Error_1 = require("./types/Error");
-//import swaggerDocument from '../swagger.json';
-//const config = require("../config.json")
 const bodyParser = require('body-parser');
-tasksdata_1.TasksData
+itemsdata_1.ItemsData
     .connect()
     .then((client) => {
-    const tasksDatabase = new tasksdata_1.TasksData(client);
-    startServer(tasksDatabase);
+    const itemsDatabase = new itemsdata_1.ItemsData(client);
+    startServer(itemsDatabase);
 });
-function startServer(tasksData) {
+function startServer(itemsData) {
     const app = express();
     app.use(morgan('dev'));
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
-    //app.get('/api/docs', express.static( 'swagger' ));RSA_NO_PADDING
-    app.get('/api/tasks', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        const tasks = yield tasksData.getAllTasks();
-        response.json({ tasks: tasks });
+    /**
+     *
+     * path: /api/items
+     * @returns {JSON} -all items in db
+     */
+    app.get('/api/items', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        const items = yield itemsData.getAllItems();
+        response.json({ items: items });
     }));
-    app.get('/api/tasks/:id', (request, response) => __awaiter(this, void 0, void 0, function* () {
+    /**
+     * path: /api/items/:id
+     * @returns {JSON}
+     */
+    app.get('/api/items/id/:id', (request, response) => __awaiter(this, void 0, void 0, function* () {
         const id = request.params.id;
         try {
-            const task = yield tasksData.getOneTask(id);
-            response.json({ task: task });
-        }
-        catch (error) {
-            response.status(404).send(Error_1.noSuchTask(id));
-        }
-    }));
-    app.post('/api/tasks', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        const task = {
-            description: request.body.description,
-            isComplete: request.body.isComplete || false,
-            dateCreated: new Date().toISOString(),
-            dateCompleted: request.body.dateCompleted || ''
-        };
-        if (Task_1.isValidTask(task)) {
-            try {
-                let temp = yield tasksData.createTask(task);
-                response.status(201).send('_id: ' + temp);
+            const item = yield itemsData.getOneItem(id);
+            if (item) {
+                response.json({ item: item }).status(200);
             }
-            catch (error) {
-                response.sendStatus(500);
-            }
-        }
-        else {
-            response.status(400).send(Error_1.invalidDescription(task));
-        }
-    }));
-    app.delete('/api/tasks/:id', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        const id = request.params.id;
-        try {
-            yield tasksData.deleteTask(id);
-            response.sendStatus(204);
-        }
-        catch (error) {
-            response.sendStatus(500);
-        }
-    }));
-    app.patch('/api/tasks/:id', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        const id = request.params.id;
-        const task = {
-            description: request.body.description,
-            dateCreated: request.body.dateCreated,
-            isComplete: request.body.isComplete || false,
-            dateCompleted: request.body.dateCompleted || ''
-        };
-        if (Task_1.isValidTask(task)) {
-            try {
-                yield tasksData.updateTask(id, task);
-                response.sendStatus(204);
-            }
-            catch (error) {
-                console.log(error);
+            else {
                 response.sendStatus(404);
             }
         }
-        else {
-            response.status(400).send(Error_1.invalidDescription(task));
+        catch (error) {
+            response.status(404).send(id);
+        }
+    }));
+    /**
+   * path: /api/items/:id
+   * @returns {item} item with matching name
+   */
+    app.get('/api/items/name/:name', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        const name = request.params.name;
+        try {
+            const item = yield itemsData.getByName(name);
+            if (item) {
+                response.json({ item: item }).status(200);
+            }
+            else {
+                response.sendStatus(404);
+            }
+        }
+        catch (error) {
+            response.status(404).send(name);
+        }
+    }));
+    app.get('/api/items/rating/:rating', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        const type = request.params.type;
+        try {
+            const item = yield itemsData.getByType(type);
+            if (item) {
+                response.json({ item: item }).status(200);
+            }
+            else {
+                response.sendStatus(404);
+            }
+        }
+        catch (error) {
+            response.status(404).send(type);
+        }
+    }));
+    app.post('/api/populate', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        const rest = JSON.parse(request.body.Restaurant);
+        try {
+            let id = yield itemsData.createItem(rest);
+            //response.writeHead(201)
+            response.setHeader("_id", id.toHexString());
+            response.sendStatus(201);
+        }
+        catch (error) {
+            response.sendStatus(500);
         }
     }));
     app.listen(process.env.PORT || 3000, function () {
