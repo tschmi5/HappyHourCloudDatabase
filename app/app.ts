@@ -3,6 +3,7 @@ import { ItemsData } from "./itemsdata";
 import * as express from 'express';
 import * as morgan from 'morgan';
 import { Request, Response } from 'express';
+import { Restaurant } from "./types/Restaurant";
 
 
 const bodyParser = require('body-parser');
@@ -80,7 +81,10 @@ function startServer(itemsData: ItemsData) {
   });
 
   app.post('/api/populate', async (request, response) => {
-    const rest = JSON.parse(request.body.Restaurant);
+    console.log(request.body.Restaurant);
+
+    const rest: Restaurant = request.body.Restaurant;
+
     
     try {
 

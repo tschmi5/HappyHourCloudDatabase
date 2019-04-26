@@ -86,7 +86,8 @@ function startServer(itemsData) {
         }
     }));
     app.post('/api/populate', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        const rest = JSON.parse(request.body.Restaurant);
+        console.log(request.body.Restaurant);
+        const rest = request.body.Restaurant;
         try {
             let id = yield itemsData.createItem(rest);
             //response.writeHead(201)

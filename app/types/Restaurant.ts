@@ -5,5 +5,5 @@ export interface Restaurant {
     price: String,
     rating: Number,
     address: String,
-    menuItems: Item[]
+    menu: Item[]
 }
