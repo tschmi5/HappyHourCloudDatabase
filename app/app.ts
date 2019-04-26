@@ -3,7 +3,6 @@ import { ItemsData } from "./itemsdata";
 import * as express from 'express';
 import * as morgan from 'morgan';
 import { Request, Response } from 'express';
-import { isValidItem } from "./types/Item";
 import { invalidDescription, noSuchItem, noChange } from "./types/Error";
 
 
