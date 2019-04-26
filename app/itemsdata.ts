@@ -42,24 +42,6 @@ export class ItemsData {
       return(res.insertedId);
   }
 
-  async deleteItem(id : string) {
-    let res = await this.items.deleteOne({ _id: new ObjectId(id) });
-    
-      return  res.deletedCount
-  }
-
-  async updateItem(id: any, item: Item){
-    let res = await this.items.updateOne(
-      {_id: new ObjectId(id)},
-      { $set: { 
-        "item":{
-          "description": item.description,
-          "isComplete": item.isComplete,
-          "dateCompleted": item.dateCompleted
-        }
-      }},
-      {upsert: false});
-      return res
-  }
+ 
   
 } 

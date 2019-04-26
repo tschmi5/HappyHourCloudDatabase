@@ -67,7 +67,7 @@ function startServer(itemsData: ItemsData) {
       response.status(404).send(noSuchItem(name));
     }
   });
-  app.get('/api/items/type/:type', async (request: Request, response: Response) => {
+  app.get('/api/items/rating/:rating', async (request: Request, response: Response) => {
     const type = request.params.type;
     try {
     const item = await itemsData.getByType(type);
@@ -81,19 +81,12 @@ function startServer(itemsData: ItemsData) {
     }
   });
 
-  app.post('/api/items', async (request, response) => {
-    const item = { 
-    description : request.body.description,
-    isComplete : request.body.isComplete || false,
-    dateCreated : new Date().toISOString(),
-    dateCompleted : request.body.dateCompleted || ''
-    }
-    
-    if(isValidItem(item)){
+  app.post('/api/populate', async (request, response) => {
+    const rest = JSON.parse(request.body.Restaurant);
     
     try {
 
-      let id = await itemsData.createItem(item);
+      let id = await itemsData.createItem(rest);
       //response.writeHead(201)
       response.setHeader("_id",id.toHexString())
       response.sendStatus(201)
@@ -101,52 +94,12 @@ function startServer(itemsData: ItemsData) {
       response.sendStatus(500);
     }
 
-  } else {
-    response.status(400).send(invalidDescription(item));
-  }
+  
   });
     
-  app.delete('/api/items/:id', async (request, response) => {
-    const id = request.params.id;
-    try {
-      let valid = await itemsData.deleteItem(id);
-      if(valid){
-        response.sendStatus(204);
+  
 
-      } else {
-        response.status(404).send(noSuchItem(id));
-      }
-    } catch (error) {
-      response.sendStatus(500);
-    }
-  });
-
-  app.patch('/api/items/:id', async (request, response) => {
-    const id = request.params.id;
-    const item = { 
-      description : request.body.description,
-      dateCreated : request.body.dateCreated,
-      isComplete : request.body.isComplete || false,
-      dateCompleted : request.body.dateCompleted || ''
-      }
-    if(isValidItem(item)){
-    try{
-      let valid = await itemsData.updateItem(id, item);
-      if(valid.matchedCount > 0 && valid.modifiedCount > 0){
-        response.sendStatus(204);
-      } else if (valid.modifiedCount == 0) {
-        response.status(400).send(noChange(id))
-      } else {
-
-      }
-    } catch (error) {
-      console.log(error)
-      response.sendStatus(404);
-    }
-  } else {
-    response.status(400).send(invalidDescription(item));
-  }
-  });
+  
 
   app.listen(process.env.PORT || 3000, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
