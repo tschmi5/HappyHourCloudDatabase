@@ -11,8 +11,8 @@ export class ItemsData {
   constructor(client: MongoClient) {
     this.items = client.db().collection('items');
   }
-  
-  
+
+
   static async connect() {
     return new Promise<MongoClient>((resolve, reject) =>
       MongoClient.connect(URL, async (err: Error, client: MongoClient) => {
@@ -28,21 +28,21 @@ export class ItemsData {
   }
 
   async getOneItem(id: string) {
-    return await this.items.findOne({ _id: new ObjectId(id)})
+    return await this.items.findOne({ _id: new ObjectId(id) })
   }
-  async getByName(name: String){
+  async getByName(name: String) {
     return await this.items.findOne({ name: name })
   }
-  async getByType(type: String){
+  async getByType(type: String) {
     return await this.items.find({ type: type }).toArray();
   }
   async createItem(item: Restaurant) {
-    let res = await this.items.insertOne({ 
+    let res = await this.items.insertOne({
       item: item
     });
-      return(res.insertedId);
+    return (res.insertedId);
   }
 
- 
-  
+
+
 } 

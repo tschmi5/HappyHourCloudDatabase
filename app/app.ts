@@ -23,28 +23,30 @@ function startServer(itemsData: ItemsData) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
-/**
- * 
- * path: /api/items
- * @returns {JSON} -all items in db
- */
+  /**
+   * 
+   * path: /api/items
+   * @returns {JSON} -all items in db
+   */
+  
+
   app.get('/api/items', async (request: Request, response: Response) => {
     const items = await itemsData.getAllItems();
     response.json({ items: items });
   });
-/**
- * path: /api/items/:id
- * @returns {JSON} 
- */
+  /**
+   * path: /api/items/:id
+   * @returns {JSON} 
+   */
   app.get('/api/items/id/:id', async (request: Request, response: Response) => {
     const id = request.params.id;
     try {
-    const item = await itemsData.getOneItem(id);
-    if(item){
-      response.json({ item: item }).status(200)
-    } else {
-      response.sendStatus(404)
-    }
+      const item = await itemsData.getOneItem(id);
+      if (item) {
+        response.json({ item: item }).status(200)
+      } else {
+        response.sendStatus(404)
+      }
     } catch (error) {
       response.status(404).send(id);
     }
@@ -56,12 +58,12 @@ function startServer(itemsData: ItemsData) {
   app.get('/api/items/name/:name', async (request: Request, response: Response) => {
     const name = request.params.name;
     try {
-    const item = await itemsData.getByName(name);
-    if(item){
-      response.json({ item: item }).status(200)
-    } else {
-      response.sendStatus(404)
-    }
+      const item = await itemsData.getByName(name);
+      if (item) {
+        response.json({ item: item }).status(200)
+      } else {
+        response.sendStatus(404)
+      }
     } catch (error) {
       response.status(404).send(name);
     }
@@ -69,12 +71,12 @@ function startServer(itemsData: ItemsData) {
   app.get('/api/items/rating/:rating', async (request: Request, response: Response) => {
     const type = request.params.type;
     try {
-    const item = await itemsData.getByType(type);
-    if(item){
-      response.json({ item: item }).status(200)
-    } else {
-      response.sendStatus(404)
-    }
+      const item = await itemsData.getByType(type);
+      if (item) {
+        response.json({ item: item }).status(200)
+      } else {
+        response.sendStatus(404)
+      }
     } catch (error) {
       response.status(404).send(type);
     }
@@ -85,25 +87,25 @@ function startServer(itemsData: ItemsData) {
 
     const rest: Restaurant = request.body.Restaurant;
 
-    
+
     try {
 
       let id = await itemsData.createItem(rest);
       //response.writeHead(201)
-      response.setHeader("_id",id.toHexString())
+      response.setHeader("_id", id.toHexString())
       response.sendStatus(201)
     } catch (error) {
       response.sendStatus(500);
     }
 
-  
+
   });
-    
-  
 
-  
 
-  app.listen(process.env.PORT || 3000, function(){
+
+
+
+  app.listen(process.env.PORT || 3000, function () {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
   });
 }
