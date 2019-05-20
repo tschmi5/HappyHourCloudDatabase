@@ -30,7 +30,7 @@ function startServer(itemsData) {
      */
     app.get('/api/items', (request, response) => __awaiter(this, void 0, void 0, function* () {
         const items = yield itemsData.getAllItems();
-        response.json({ items: items }).setHeader("Access-Control-Allow-Origin", "*");
+        response.sendStatus(418).json({ items: items }).setHeader("Access-Control-Allow-Origin", "*");
     }));
     /**
      * path: /api/items/:id
