@@ -17,9 +17,10 @@ ItemsData
   });
 
 function startServer(itemsData: ItemsData) {
-  const app = express();
 
+  const app = express();
   app.use(cors());
+
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
@@ -28,7 +29,8 @@ function startServer(itemsData: ItemsData) {
    * path: /api/items
    * @returns {JSON} -all items in db
    */
-  
+  app.use(cors());
+
 
   app.get('/api/items', async (request: Request, response: Response) => {
     const items = await itemsData.getAllItems();
