@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const itemsdata_1 = require("./itemsdata");
 const express = require("express");
-const morgan = require("morgan");
+const cors = require('cors');
 const bodyParser = require('body-parser');
 itemsdata_1.ItemsData
     .connect()
@@ -20,7 +20,7 @@ itemsdata_1.ItemsData
 });
 function startServer(itemsData) {
     const app = express();
-    app.use(morgan('dev'));
+    app.use(cors());
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     /**
@@ -39,6 +39,7 @@ function startServer(itemsData) {
      * @returns {JSON}
      */
     app.get('/api/items/id/:id', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        response.header("Access-Control-Allow-Origin", "*");
         const id = request.params.id;
         try {
             const item = yield itemsData.getOneItem(id);

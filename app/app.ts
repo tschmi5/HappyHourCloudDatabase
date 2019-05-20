@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as morgan from 'morgan';
 import { Request, Response } from 'express';
 import { Restaurant } from "./types/Restaurant";
+const cors = require('cors')
 
 
 const bodyParser = require('body-parser');
@@ -18,7 +19,7 @@ ItemsData
 function startServer(itemsData: ItemsData) {
   const app = express();
 
-  app.use(morgan('dev'));
+  app.use(cors());
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
@@ -42,6 +43,8 @@ function startServer(itemsData: ItemsData) {
    * @returns {JSON} 
    */
   app.get('/api/items/id/:id', async (request: Request, response: Response) => {
+    response.header("Access-Control-Allow-Origin","*")
+
     const id = request.params.id;
     try {
       const item = await itemsData.getOneItem(id);
