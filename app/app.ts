@@ -20,7 +20,6 @@ function startServer(itemsData: ItemsData) {
   const app = express();
 
   app.use(cors());
-
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
@@ -33,8 +32,7 @@ function startServer(itemsData: ItemsData) {
 
   app.get('/api/items', async (request: Request, response: Response) => {
     const items = await itemsData.getAllItems();
-    response.header("Access-Control-Allow-Origin","*")
-
+    
     response.json({ items: items })
     console.log(response)
   });
@@ -43,7 +41,6 @@ function startServer(itemsData: ItemsData) {
    * @returns {JSON} 
    */
   app.get('/api/items/id/:id', async (request: Request, response: Response) => {
-    response.header("Access-Control-Allow-Origin","*")
 
     const id = request.params.id;
     try {

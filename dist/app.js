@@ -30,7 +30,6 @@ function startServer(itemsData) {
      */
     app.get('/api/items', (request, response) => __awaiter(this, void 0, void 0, function* () {
         const items = yield itemsData.getAllItems();
-        response.header("Access-Control-Allow-Origin", "*");
         response.json({ items: items });
         console.log(response);
     }));
@@ -39,7 +38,6 @@ function startServer(itemsData) {
      * @returns {JSON}
      */
     app.get('/api/items/id/:id', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        response.header("Access-Control-Allow-Origin", "*");
         const id = request.params.id;
         try {
             const item = yield itemsData.getOneItem(id);
