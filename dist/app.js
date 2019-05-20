@@ -30,6 +30,7 @@ function startServer(itemsData) {
      */
     app.get('/api/items', (request, response) => __awaiter(this, void 0, void 0, function* () {
         const items = yield itemsData.getAllItems();
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.json({ items: items });
     }));
     /**
