@@ -33,7 +33,9 @@ function startServer(itemsData: ItemsData) {
   app.get('/api/items', async (request: Request, response: Response) => {
     const items = await itemsData.getAllItems();
     response.header("Access-Control-Allow-Origin","*")
+
     response.json({ items: items })
+    console.log(response)
   });
   /**
    * path: /api/items/:id

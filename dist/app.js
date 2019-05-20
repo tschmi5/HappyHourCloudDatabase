@@ -32,6 +32,7 @@ function startServer(itemsData) {
         const items = yield itemsData.getAllItems();
         response.header("Access-Control-Allow-Origin", "*");
         response.json({ items: items });
+        console.log(response);
     }));
     /**
      * path: /api/items/:id
